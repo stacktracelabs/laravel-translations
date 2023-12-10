@@ -182,6 +182,22 @@ class LocalizedValue implements Arrayable, ArrayAccess, JsonSerializable
     }
 
     /**
+     * Create localized value of given value for current locale.
+     *
+     * @param TValue|null $value
+     */
+    public static function makeForCurrentLocale($value): static
+    {
+        if (static::isValueEmpty($value)) {
+            return static::empty();
+        }
+
+        return static::make([
+            Facades\Translations::getLocale() => $value,
+        ]);
+    }
+
+    /**
      * Create new localized string from array of values.
      */
     public static function makeForAllowedLocales(array $value, ?array $allowedLocales = null): static
