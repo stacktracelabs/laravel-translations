@@ -88,13 +88,43 @@ class LocalizedValue implements Arrayable, ArrayAccess, JsonSerializable
 
     /**
      * Retrieve the value of the string for current locale.
+     *
+     * @return TValue|null
      */
-    public function getValue(bool $useFallback = true): mixed
+    public function getValue(bool $useFallback = true)
     {
         return $this->getValueForLocale(
             locale: Facades\Translations::getLocale(),
             useFallback: $useFallback
         );
+    }
+
+    /**
+     * Retrieve the value of the string for current locale.
+     *
+     * @return TValue|null
+     */
+    public function value(bool $useFallback)
+    {
+        return $this->getValue($useFallback);
+    }
+
+    /**
+     * Map each locale value through given callback, returning new value.
+     */
+    public function map(callable $callback): static
+    {
+        return new static(collect($this->value)->map($callback)->all());
+    }
+
+    /**
+     * Remove translations for given locales.
+     */
+    public function forget(array|string $locales): static
+    {
+        $this->value = Arr::except($this->value, Arr::wrap($locales));
+
+        return $this;
     }
 
     /**
