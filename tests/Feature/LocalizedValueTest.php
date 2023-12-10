@@ -1,12 +1,12 @@
 <?php
 
-use StackTrace\Translations\LocalizedString;
+use StackTrace\Translations\LocalizedValue;
 
 beforeEach(fn () => setAppLocale());
 
-function testStr(): LocalizedString
+function testStr(): LocalizedValue
 {
-    return LocalizedString::make([
+    return LocalizedValue::make([
         'sk' => 'SK',
         'cs' => 'CS',
         'de' => 'DE',
@@ -17,14 +17,14 @@ function testStr(): LocalizedString
 }
 
 it('should make for all locales', function () {
-    expect(LocalizedString::make([
+    expect(LocalizedValue::make([
         'cs' => 'CS',
         'fr' => 'FR',
     ]))->toArray()->toMatchArray(['cs' => 'CS', 'fr' => 'FR']);
 });
 
 it('should make for allowed locales', function () {
-    expect(LocalizedString::makeForAllowedLocales([
+    expect(LocalizedValue::makeForAllowedLocales([
         'de' => 'DE',
         'cs' => 'CS',
         'fr' => 'FR',
@@ -36,17 +36,17 @@ it('should create test string', function () {
 });
 
 it('should create empty localized string', function () {
-    expect(LocalizedString::empty())->isEmpty()->toBeTrue();
+    expect(LocalizedValue::empty())->isEmpty()->toBeTrue();
 });
 
 it('should return empty array on empty string', function () {
-    expect(LocalizedString::empty())->toArray()->toBeEmpty();
+    expect(LocalizedValue::empty())->toArray()->toBeEmpty();
 });
 
 it('should create localized string from allowed locales', function () {
     useLocales(['sk', 'en', 'de', 'cs']);
 
-    expect(LocalizedString::makeForAllowedLocales([
+    expect(LocalizedValue::makeForAllowedLocales([
         'sk' => 'Test SK',
         'en' => 'Test EN',
         'de' => 'Test DE'
@@ -56,7 +56,7 @@ it('should create localized string from allowed locales', function () {
 it('should return string with default app locales when locales are not set', function () {
     useLocales([]);
 
-    expect(LocalizedString::makeForAllowedLocales([
+    expect(LocalizedValue::makeForAllowedLocales([
         'sk' => 'Test SK',
         'en' => 'Test EN',
         'de' => 'Test DE'
@@ -64,7 +64,7 @@ it('should return string with default app locales when locales are not set', fun
 
     useLocales(['fr']);
 
-    expect(LocalizedString::makeForAllowedLocales([
+    expect(LocalizedValue::makeForAllowedLocales([
         'de' => 'DE',
         'cs' => 'CS',
         'fr' => 'FR',
