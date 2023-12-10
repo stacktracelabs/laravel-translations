@@ -16,9 +16,13 @@ class AsLocalizedValue implements CastsAttributes
      */
     public function get(Model $model, string $key, mixed $value, array $attributes)
     {
-        $decoded = Json::decode($value ?? '' ?: '{}') ?: [];
+        if (is_string($value)) {
+            $value = Json::decode($value ?? '' ?: '{}') ?: [];
+        } else if (is_null($value)) {
+            $value = [];
+        }
 
-        return $this->newValue($decoded);
+        return $this->newValue($value);
     }
 
     /**
