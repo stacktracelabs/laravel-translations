@@ -30,7 +30,7 @@ class Translations
      */
     public function getAllFallbackLocales(): array
     {
-        $locales = config('translations::translations.fallback_locales', []);
+        $locales = config('translations.fallback_locales', []);
 
         if (empty($locales)) {
             return [App::getLocale() => [App::getFallbackLocale()]];
@@ -44,7 +44,7 @@ class Translations
      */
     public function getLocales(): array
     {
-        $locales = config('translations::translations.locales', []);
+        $locales = config('translations.locales', []);
 
         return empty($locales) ? array_unique([App::getLocale(), App::getFallbackLocale()]) : $locales;
     }

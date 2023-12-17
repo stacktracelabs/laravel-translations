@@ -12,10 +12,10 @@ function setAppLocale(string $locale = 'sk', string $fallback = 'en'): void
 
 function useLocales(array $locales): void
 {
-    config()->set('translations::translations.locales', $locales);
+    config()->set('translations.locales', $locales);
 }
 
 function useFallbackLocales(array $locales): void
 {
-    config()->set('translations::translations.fallback_locales', $locales);
+    config()->set('translations.fallback_locales', $locales);
 }
