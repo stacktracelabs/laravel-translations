@@ -104,7 +104,7 @@ class LocalizedValue implements Arrayable, ArrayAccess, JsonSerializable
      *
      * @return TValue|null
      */
-    public function value(bool $useFallback)
+    public function value(bool $useFallback = true)
     {
         return $this->getValue($useFallback);
     }
