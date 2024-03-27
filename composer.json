@@ -1,6 +1,6 @@
 {
-    "name": "stacktrace/translations",
-    "description": "Translation package for Laravel.",
+    "name": "stacktrace/laravel-translations",
+    "description": "Opinionated translation package for Laravel.",
     "type": "library",
     "license": "MIT",
     "require": {
