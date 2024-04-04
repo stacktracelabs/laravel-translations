@@ -4,6 +4,9 @@
 namespace StackTrace\Translations;
 
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
@@ -17,6 +20,38 @@ trait HasTranslations
     public function initializeHasTranslations(): void
     {
         //
+    }
+
+    /**
+     * Append a localized where clause to query.
+     */
+    public function scopeWhereLocalized(Builder $builder, string $column, $operator, $value, $boolean = "and", $collate = null): void
+    {
+        // TODO: Add support for multiple fallback locales.
+        $locale = App::getLocale();
+        $fallbackLocale = App::getFallbackLocale();
+
+        $resolveJsonPath = function (string $locale) use ($column) {
+            $path = collect(explode(".", $column));
+
+            $column = $path->splice(0, 1)->first();
+
+            $path = $path->push($locale)->map(fn ($it) => '"'.$it.'"')->join('.');
+
+            return "`{$column}`->'$.{$path}'";
+        };
+
+        if ($locale == $fallbackLocale) {
+            $clause = "JSON_UNQUOTE(".$resolveJsonPath($locale).")";
+        } else {
+            $clause = "JSON_UNQUOTE(IFNULL(".$resolveJsonPath($locale).", ".$resolveJsonPath($fallbackLocale)."))";
+        }
+
+        if ($collate) {
+            $clause .= " COLLATE {$collate}";
+        }
+
+        $builder->where(DB::raw($clause), $operator, $value, $boolean);
     }
 
     /**
