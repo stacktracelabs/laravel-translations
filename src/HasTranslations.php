@@ -25,7 +25,7 @@ trait HasTranslations
     /**
      * Append a localized where clause to query.
      */
-    public function scopeWhereLocalized(Builder $builder, string $column, $operator, $value, $boolean = "and", $collate = null): void
+    public function scopeWhereLocalized(Builder $builder, string $column, $operator, $value, $boolean = "and", $caseInsensitive = false): void
     {
         // TODO: Add support for multiple fallback locales.
         $locale = App::getLocale();
@@ -47,8 +47,9 @@ trait HasTranslations
             $clause = "JSON_UNQUOTE(IFNULL(".$resolveJsonPath($locale).", ".$resolveJsonPath($fallbackLocale)."))";
         }
 
-        if ($collate) {
-            $clause .= " COLLATE {$collate}";
+        if ($caseInsensitive) {
+            $clause = "LOWER($clause)";
+            $value = is_string($value) ? Str::lower($value) : $value;
         }
 
         $builder->where(DB::raw($clause), $operator, $value, $boolean);
