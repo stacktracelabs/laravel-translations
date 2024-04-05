@@ -38,7 +38,7 @@ trait HasTranslations
 
             $path = $path->push($locale)->map(fn ($it) => '"'.$it.'"')->join('.');
 
-            return "`{$column}`->'$.{$path}'";
+            return "JSON_EXTRACT(`{$column}`, '$.{$path}')";
         };
 
         if ($locale == $fallbackLocale) {
